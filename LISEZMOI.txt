@@ -1,0 +1,65 @@
+LE CALENDRIER DE L'AVENT DE LA ROMCOM
+=====================================
+
+CE QUE CONTIENT CE DOSSIER
+--------------------------
+index.html              La page du calendrier (les 24 cases et les fiches en popup)
+manifeste.html          Le manifeste de la comédie romantique
+qui-sommes-nous.html    La page Qui sommes-nous (texte à compléter)
+assets/films.js         LES TEXTES DES 24 FICHES : titres, crédits, pitch, 3 raisons, plateformes
+assets/style.css        Le style (couleurs, polices, mise en page)
+assets/app.js           Le fonctionnement (dates, ouverture des cases, popup)
+images/affiches/        Les affiches officielles (01.jpg = case 1, etc.)
+images/scenes/          Les images qui remplacent la porte une fois la case ouverte
+
+METTRE LE SITE EN LIGNE (le plus simple : Netlify, gratuit)
+-----------------------------------------------------------
+1. Allez sur https://app.netlify.com/drop
+2. Créez un compte gratuit si on vous le demande.
+3. Glissez-déposez le dossier "calendrier-romcom" entier dans la page.
+4. Netlify vous donne une adresse du type https://xxxx.netlify.app : le site est en ligne.
+5. (Facultatif) Dans Netlify, "Domain settings" permet de renommer l'adresse
+   ou de brancher votre propre nom de domaine.
+
+Pour une mise à jour : sur Netlify, ouvrez le site, onglet "Deploys",
+puis glissez à nouveau le dossier.
+
+Autre hébergeur (OVH, o2switch, etc.) : envoyez tout le contenu du dossier
+par FTP à la racine de votre site. Aucun réglage particulier n'est nécessaire.
+
+COMMENT ÇA MARCHE
+-----------------
+- Chaque case se débloque à minuit (heure de Paris), du 1er au 24 décembre 2026.
+- Avant le 1er décembre, toutes les cases sont fermées et un compte à rebours s'affiche.
+- Une case débloquée scintille. Quand le visiteur clique, la porte pivote,
+  l'image du film apparaît et la fiche s'ouvre.
+- Une case ouverte le reste (le navigateur du visiteur s'en souvient).
+- Après Noël, toutes les cases restent accessibles.
+
+RELIRE AVANT LE 1ER DÉCEMBRE
+----------------------------
+Ajoutez ?apercu à la fin de l'adresse pour tout ouvrir, par exemple :
+  https://xxxx.netlify.app/?apercu
+Ou simulez un jour précis :
+  https://xxxx.netlify.app/?date=2026-12-10
+
+À savoir : le verrouillage se fait dans le navigateur. Quelqu'un de très
+curieux qui fouille le code pourrait lire les fiches en avance.
+
+MODIFIER UN TEXTE
+-----------------
+Ouvrez assets/films.js avec un éditeur de texte (TextEdit en mode texte brut,
+ou mieux : VS Code). Chaque film commence par "jour": N. Modifiez le texte
+entre guillemets, en gardant les guillemets et les virgules.
+Dans un texte, \n signifie "retour à la ligne".
+
+Pour être sûr que les visiteurs voient la nouvelle version, augmentez le
+numéro "?v=7" en "?v=8" dans index.html (lignes qui appellent les fichiers
+assets/...).
+
+OÙ REGARDER : À REVÉRIFIER
+--------------------------
+Les plateformes ont été vérifiées le 26 octobre 2026 (source JustWatch).
+Les catalogues changent souvent : pensez à les revérifier fin novembre
+(champs "abonnement" et "location" de chaque film dans assets/films.js),
+puis mettez à jour la date en haut du fichier (VERIF_PLATEFORMES).
