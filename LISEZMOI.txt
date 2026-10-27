@@ -54,7 +54,7 @@ entre guillemets, en gardant les guillemets et les virgules.
 Dans un texte, \n signifie "retour à la ligne".
 
 Pour être sûr que les visiteurs voient la nouvelle version, augmentez le
-numéro "?v=7" en "?v=8" dans index.html (lignes qui appellent les fichiers
+numéro "?v=11" en "?v=12" dans index.html (lignes qui appellent les fichiers
 assets/...).
 
 OÙ REGARDER : À REVÉRIFIER

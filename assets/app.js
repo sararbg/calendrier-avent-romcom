@@ -77,6 +77,7 @@
     b.dataset.jour = jour;
     b.style.setProperty("--i", i);
     b.innerHTML =
+      '<span class="halo" aria-hidden="true"></span>' +
       '<span class="case-inner">' +
         '<span class="face porte"><span class="num">' + jour + '</span><span class="mois">déc.</span></span>' +
         '<span class="face scene"><span class="pastille">' + jour + "</span></span>" +
@@ -135,8 +136,12 @@
 
     // Bloc-générique façon affiche : rôle en petit, noms en grand
     function ligneGenerique(role, noms, classe, suite) {
+      // chaque nom garde son « · » avec lui, pour qu'aucun séparateur n'ouvre une ligne
+      var liste = noms.map(function (n, i) {
+        return '<span class="nm">' + echapper(n) + (i < noms.length - 1 ? " ·" : "") + "</span>";
+      }).join(" ");
       return '<p class="' + (classe || "") + '"><span class="role">' + role + '</span><span class="noms">' +
-        noms.map(echapper).join(" · ") + "</span>" + (suite || "") + "</p>";
+        liste + "</span>" + (suite || "") + "</p>";
     }
     var generique = "";
     if (f.realisation.length) generique += ligneGenerique("Réalisation", f.realisation);
@@ -145,8 +150,10 @@
     if (f.casting.length) generique += ligneGenerique("Avec", f.casting, "avec");
 
     function listePlateformes(liste) {
-      return liste.map(function (p) { return '<span class="nom">' + echapper(p) + "</span>"; })
-        .join('<span class="sep" aria-hidden="true">/</span> ');
+      return liste.map(function (p, i) {
+        return '<span class="nom' + (p.length > 18 ? " long" : "") + '">' + echapper(p) +
+          (i < liste.length - 1 ? '<span class="sep" aria-hidden="true"> /</span>' : "") + "</span>";
+      }).join(" ");
     }
     var seances =
       '<div class="ligne"><dt>Avec abonnement</dt>' +
@@ -158,10 +165,10 @@
       '<div class="fiche-haut">' +
         '<img class="fiche-affiche" src="' + f.affiche + '" alt="Affiche du film ' + echapper(f.titre) + '" width="500" height="750">' +
         "<div>" +
-          '<p class="fiche-date">' + jourSemaine(jour) + " " + dateTexte(jour) + "</p>" +
           '<h2 class="fiche-titre" id="fiche-titre">' + echapper(f.titre) + "</h2>" +
           '<p class="fiche-vf">' + (f.titreVF ? "(VF : " + echapper(f.titreVF) + "), " : "") +
             '<span class="fiche-annee">' + f.annee + "</span></p>" +
+          '<p class="fiche-date">Case du ' + jourSemaine(jour) + " " + dateTexte(jour) + "</p>" +
         "</div>" +
         '<div class="generique">' + generique + "</div>" +
       "</div>" +
@@ -201,7 +208,8 @@
     } else if (auj.a === ANNEE && auj.m === 12 && auj.j <= 24) {
       var jourJ = auj.j;
       if (ouvertes.indexOf(jourJ) === -1) {
-        statut.textContent = "La case du " + dateTexte(jourJ) + " est prête";
+        statut.innerHTML = '<button type="button" class="vers-case" data-jour="' + jourJ + '">Trouver la case du ' +
+          dateTexte(jourJ) + "</button>";
       } else if (jourJ < 24) {
         statut.textContent = "Prochaine séance demain, " + dateTexte(jourJ + 1);
       } else {
@@ -213,6 +221,19 @@
   }
   majStatut();
   if (apercu) document.getElementById("apercu").hidden = false;
+
+  // Les cases sont mélangées : ce bouton amène à celle du jour et la fait briller
+  var mouvementReduit = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  statut.addEventListener("click", function (e) {
+    var bouton = e.target.closest(".vers-case");
+    if (!bouton) return;
+    var c = caseDe(Number(bouton.dataset.jour));
+    if (!c) return;
+    c.scrollIntoView({ behavior: mouvementReduit ? "auto" : "smooth", block: "center" });
+    c.focus({ preventScroll: true });
+    c.classList.remove("repere"); void c.offsetWidth; c.classList.add("repere");
+    setTimeout(function () { c.classList.remove("repere"); }, 2400);
+  });
 
   // ---------- Petit message ----------
   var toastEl = document.getElementById("toast"), minuteur;
